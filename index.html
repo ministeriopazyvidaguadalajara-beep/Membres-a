@@ -287,8 +287,11 @@ async function cargarDatos() {
 async function guardarEnSheets(miembro) {
   setSyncStatus('orange', 'Guardando...');
   try {
-    const url = SHEET_URL + '?action=save&data=' + encodeURIComponent(JSON.stringify(miembro));
-    await fetch(url);
+    await fetch(SHEET_URL, {
+      method: 'POST', mode: 'no-cors',
+      body: JSON.stringify({action:'save', member: miembro}),
+      headers: {'Content-Type':'application/json'}
+    });
     try { localStorage.setItem('pv_backup', JSON.stringify(DB)); } catch(e){}
     setSyncStatus('ok', 'Guardado · ' + new Date().toLocaleTimeString('es-ES'));
   } catch(e) {
@@ -299,8 +302,11 @@ async function guardarEnSheets(miembro) {
 
 async function eliminarEnSheets(id) {
   try {
-    const url = SHEET_URL + '?action=delete&id=' + encodeURIComponent(id);
-    await fetch(url);
+    await fetch(SHEET_URL, {
+      method: 'POST', mode: 'no-cors',
+      body: JSON.stringify({action:'delete', id: id}),
+      headers: {'Content-Type':'application/json'}
+    });
   } catch(e) {}
 }
 
